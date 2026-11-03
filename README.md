@@ -1,6 +1,6 @@
 # GATHA FASHION — Membership & Inventory
 
-Local shop app for memberships, checkout, inventory costing and sales reporting.
+Shop app for memberships, checkout, inventory costing and sales reporting.
 
 ## Start
 
@@ -10,9 +10,11 @@ On first launch, choose **First time? Set up owner account** on the sign-in scre
 
 ## Inventory and financial data
 
-Inventory, purchases, sales, expenses, returns, stock movements, and audit entries are stored under `data/inventory.json`; private product photos are stored under `data/uploads`. The data format has a schema version and migration hook. Back up the `data` directory regularly. Membership and membership-sales records remain in the existing browser `localStorage` (`memberly-v1`) to preserve the current app; they do not sync with the server's inventory data.
+For local development, inventory, purchases, sales, expenses, returns, stock movements, and audit entries are stored under `data/inventory.json`; private product photos are stored under `data/uploads`. The data format has a schema version and migration hook. Back up the `data` directory regularly. Hosted Netlify deployments use the configured Supabase project instead of local files. Keep its service key in server-side environment variables only.
 
-Inventory, reports, settings and staff management require the owner session. Cashier sessions are limited to checkout and member lookup. Passwords and recovery codes use salted scrypt hashes; sessions use random, hashed, HTTP-only, SameSite cookies that expire after 12 hours. Password recovery checks the registered phone number and the one-time backup code. It does not send SMS. Do not expose this local server to the internet; production use needs a hosted database, HTTPS, backups, and deployment-level hardening.
+Hosted membership state is loaded from the app's authenticated API and cached in browser `localStorage` (`memberly-v1`). For the GitHub Pages frontends, the short-lived API session token is held in `sessionStorage` and sent only to the configured API host. Sessions expire after 12 hours.
+
+Inventory, reports, settings and staff management require the owner session. Cashier sessions are limited to checkout and member lookup. Passwords and recovery codes use salted scrypt hashes; session tokens are random and stored as hashes by the API. Password recovery checks the registered phone number and the one-time backup code. It does not send SMS. Do not expose the local development server to the internet.
 
 ## Inventory features
 
@@ -28,3 +30,7 @@ Profit figures use landed unit cost for gross profit. Net profit means gross pro
 ## Existing membership and WhatsApp
 
 Membership and WhatsApp features remain in the browser app. WhatsApp messages are prepared for staff review and manual sending; this app does not automatically send SMS or WhatsApp messages.
+
+## Hosted environments
+
+The `main` branch is production and the `test` branch is the test version in `gatha-fashion-retail`. GitHub Pages serves static frontend files; the current API is supplied by the corresponding Netlify site and uses its existing Supabase environment. Pages cannot run the API itself. Keep Netlify running until a replacement API host is deployed and verified.
