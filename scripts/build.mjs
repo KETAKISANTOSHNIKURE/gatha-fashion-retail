@@ -4,7 +4,7 @@ import path from 'node:path';
 // cwd also avoids resolving the workspace parent's real path in sandboxed runs.
 const root=process.cwd();
 const output=path.join(root,'public');
-const files=['index.html','app.js','inventory.js','styles.css','inventory.css','theme.css','fashion-illustration.svg','fashion-reference-cutout.png'];
+const files=['index.html','app.js','inventory.js','styles.css','inventory.css','theme.css','fashion-illustration.svg','fashion-reference-cutout.png','gatha-emblem.png'];
 await fs.rm(output,{recursive:true,force:true});
 await fs.mkdir(output,{recursive:true});
 for(const file of files)await fs.copyFile(path.join(root,file),path.join(output,file));
